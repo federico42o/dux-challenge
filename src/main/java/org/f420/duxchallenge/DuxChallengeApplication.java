@@ -9,5 +9,4 @@ public class DuxChallengeApplication {
     public static void main(String[] args) {
         SpringApplication.run(DuxChallengeApplication.class, args);
     }
-
 }
