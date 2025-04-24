@@ -24,6 +24,11 @@ public class TeamSpecification {
         if (filter.getPais() != null && !filter.getPais().isBlank()) {
             specs.add(buildSpecification(new Criteria("pais", ILIKE, filter.getPais())));
         }
+
+        if (filter.getLiga() != null && !filter.getLiga().isBlank()) {
+            specs.add(buildSpecification(new Criteria("liga", ILIKE, filter.getLiga())));
+        }
+
         // * default
         specs.add(buildSpecification(new Criteria("deleted", EQUALS, Boolean.FALSE.toString())));
 
