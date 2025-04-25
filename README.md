@@ -14,9 +14,9 @@ Esto inicia el servidor en el puerto 8080
 # Datos pre-cargados
 ## 1. Usuarios
 
-| user_id | username   | password |
-|---------|------------|----------|
-| 1       | admin      | 123456   |
+| user_id | username | password |
+|---------|----------|----------|
+| 1       | test     | 12345    |
 
 ## 2. Equipos
 
