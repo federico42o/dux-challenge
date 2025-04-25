@@ -89,6 +89,7 @@ public class JWTUtils {
         try {
             JWTVerifier verifier = JWT.require(signAlgorithm)
                     .withIssuer(this.issuer)
+                    .acceptExpiresAt(0)
                     .build();
 
             return verifier.verify(token);
