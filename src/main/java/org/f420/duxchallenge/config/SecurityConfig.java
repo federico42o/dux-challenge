@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.f420.duxchallenge.constants.SecurityConstants.*;
 @Configuration
 @Slf4j
 public class SecurityConfig {
@@ -35,13 +36,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                )
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                )
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers(PUBLIC_PATHS).permitAll()
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/teams/**").hasAnyAuthority("admin", "teams"))
@@ -54,7 +49,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() throws Exception {
+    public PasswordEncoder passwordEncoder() {
             return new BCryptPasswordEncoder();
     }
 }

@@ -19,20 +19,27 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static org.f420.duxchallenge.constants.Constants.CLAIM_AUTHORITIES;
 import static org.f420.duxchallenge.constants.Constants.JSON_CONTENT_TYPE;
+import static org.f420.duxchallenge.enums.ErrorMessage.MALFORMED_JWT;
+import static org.f420.duxchallenge.enums.ErrorMessage.MISSING_JWT;
 import static org.f420.duxchallenge.utils.ConvertUtils.toObjectString;
+import static org.f420.duxchallenge.constants.SecurityConstants.*;
 
 @Slf4j
 public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
     private final JWTUtils jwtUtils;
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     public JwtTokenValidatorFilter(JWTUtils jwtUtils) {
         this.jwtUtils = jwtUtils;
@@ -45,7 +52,7 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         String jwtToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (jwtToken != null){
+        if (jwtToken != null && jwtToken.startsWith("Bearer ")) {
             try {
                 jwtToken = jwtToken.substring(7);
                 DecodedJWT decodedJWT = jwtUtils.validateToken(jwtToken);
@@ -57,21 +64,29 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
                 securityContext.setAuthentication(authentication);
                 SecurityContextHolder.setContext(securityContext);
             } catch (ApiException ex) {
-                buildResponse(response);
+                buildResponse(response, MALFORMED_JWT, HttpStatus.UNAUTHORIZED);
                 return;
             }
+        } else if (!isPublicPath(request.getServletPath())) {
+            buildResponse(response, MISSING_JWT, HttpStatus.UNAUTHORIZED);
+            return;
         }
          filterChain.doFilter(request, response);
     }
 
-    private void buildResponse(HttpServletResponse response) throws IOException {
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+    private void buildResponse(HttpServletResponse response, ErrorMessage errorMessage, HttpStatus status) throws IOException {
+        response.setStatus(status.value());
         response.setContentType(JSON_CONTENT_TYPE);
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .errorMessage(ErrorMessage.MALFORMED_JWT.getMessage())
-                .statusCode(HttpStatus.UNAUTHORIZED.value())
+                .errorMessage(errorMessage.getMessage())
+                .statusCode(status.value())
                 .timestamp((ZonedDateTime.now()))
                 .build();
         response.getWriter().write(toObjectString(errorResponse));
+    }
+
+
+    private boolean isPublicPath(String path) {
+        return Arrays.stream(PUBLIC_PATHS).anyMatch(pattern -> pathMatcher.match(pattern, path));
     }
 }

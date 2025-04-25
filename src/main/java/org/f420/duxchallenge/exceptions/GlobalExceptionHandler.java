@@ -3,6 +3,7 @@ package org.f420.duxchallenge.exceptions;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import lombok.extern.slf4j.Slf4j;
 import org.f420.duxchallenge.dto.ErrorResponse;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -50,6 +51,16 @@ public class GlobalExceptionHandler {
                 .statusCode(HttpStatus.FORBIDDEN.value())
                 .timestamp(ZonedDateTime.now())
                 .build(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ErrorResponse> handlePropertyReferenceException(PropertyReferenceException ex) {
+        log.error("excepcion capturada: {}", ex.getMessage());
+        return new ResponseEntity<>(ErrorResponse.builder()
+                .errorMessage(ex.getMessage())
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .timestamp(ZonedDateTime.now())
+                .build(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
