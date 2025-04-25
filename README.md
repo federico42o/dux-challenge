@@ -11,6 +11,25 @@ docker build -t dux-challenge .
 docker run -d -p 8080:8080 dux-challenge
 ```
 Esto inicia el servidor en el puerto 8080
+
+### Endpoint de login
+### Ejemplo de solicitud con `curl`:
+```http
+curl -X 'POST' \
+  'http://localhost:8080/auth/login' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "username": "test",
+  "password": "12345"
+}'
+```
+### Ejemplo de respuesta:
+```json
+{
+  "token": "<TOKEN>"
+}
+```
 # Datos pre-cargados
 ## 1. Usuarios
 
@@ -46,3 +65,12 @@ Esto inicia el servidor en el puerto 8080
 | 22      | Besiktas JK               | Turquía      | Süper Lig            |
 | 23      | SSC Napoli                | Italia       | Serie A              |
 | 24      | Atlético Madrid           | España       | La Liga              |
+
+## Tecnologías utilizadas
+
+- Java 17
+- Spring Boot 3.3.10
+- Spring Security (con JWT)
+- H2 Database (en memoria)
+- Docker
+- Swagger / OpenAPI
