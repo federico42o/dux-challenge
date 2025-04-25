@@ -17,6 +17,10 @@ public class TeamSpecification {
     public static Specification<Team> buildSpecificationFromFilter(TeamDTO filter) {
         List<Specification<Team>> specs = new ArrayList<>();
 
+        if (filter.getId() != null && filter.getId() != 0) {
+            specs.add(buildSpecification(new Criteria("id", EQUALS, filter.getId().toString())));
+        }
+
         if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
             specs.add(buildSpecification(new Criteria("nombre", ILIKE, filter.getNombre())));
         }
