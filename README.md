@@ -3,12 +3,24 @@
 Visualizar la documentación de los endpoints en Swagger:
 
 👉 [Abrir Swagger UI](http://localhost:8080/swagger-ui/index.html#/)
-
+## Compilación y ejecución
+```bash
+docker build -t dux-challenge .
+```
+```bash
+docker run -d -p 8080:8080 dux-challenge
+```
+Esto inicia el servidor en el puerto 8080
 # Datos pre-cargados
+## 1. Usuarios
 
-## 1. Teams
+| user_id | username   | password |
+|---------|------------|----------|
+| 1       | admin      | 123456   |
 
-| team_id | name                      | country      | league               |
+## 2. Equipos
+
+| team_id | nombre                    | pais         | liga                 |
 |---------|---------------------------|--------------|----------------------|
 | 1       | Real Madrid               | España       | La Liga              |
 | 2       | FC Barcelona              | España       | La Liga              |
