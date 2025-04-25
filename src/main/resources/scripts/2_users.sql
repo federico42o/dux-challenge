@@ -1,0 +1,2 @@
+INSERT into users(user_id, username, password, is_enabled) values(1, 'admin', '$2a$10$cKDaVFXl/l24TmiRHBhZGehreXZ6rCJRgpJ9btsRJQlxfSCH9Nnem', true);
+INSERT into users(user_id, username, password, is_enabled) values(2, 'user_teams', '$2a$10$cKDaVFXl/l24TmiRHBhZGehreXZ6rCJRgpJ9btsRJQlxfSCH9Nnem', true);

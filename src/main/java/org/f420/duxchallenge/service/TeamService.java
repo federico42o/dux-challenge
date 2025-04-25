@@ -18,7 +18,6 @@ import java.util.Optional;
 
 import static org.f420.duxchallenge.dao.custom.TeamSpecification.buildSpecificationFromFilter;
 import static org.f420.duxchallenge.enums.ErrorMessage.ENTITY_NOT_FOUND;
-import static org.f420.duxchallenge.utils.ValidationUtils.hasValidValue;
 
 @Service
 public class TeamService {

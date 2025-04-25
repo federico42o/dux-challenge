@@ -10,6 +10,10 @@ public enum ErrorMessage {
     BAD_REQUEST("La solicitud es inválida", 400),
     TEAM_ALREADY_EXISTS("El equipo {0} ya está registado {1}", 400),
     TEAM_REGISTERED_IN_ANOTHER_LEAGUE("El equipo {0} ya está registado en otra liga: {1}", 400),
+    BAD_CREDENTIALS("Usuario o contraseña incorrectos", 401),
+    USERNAME_NOT_FOUND("El usuario {0} no fue encontrado.", 404),
+    MALFORMED_JWT("Token inválido", 401),
+    ACCESS_DENIED("No tiene permisos para acceder a este recurso", 403),
     ;
 
     private final String message;

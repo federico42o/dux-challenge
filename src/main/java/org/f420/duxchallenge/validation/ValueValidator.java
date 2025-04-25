@@ -5,8 +5,6 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.Objects;
 
-import static org.f420.duxchallenge.utils.ValidationUtils.hasValidValue;
-
 public class ValueValidator implements ConstraintValidator<NotEmpty, String> {
 
     @Override

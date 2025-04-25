@@ -14,6 +14,30 @@ import static org.f420.duxchallenge.enums.ErrorMessage.JSON_PROCESSING_ERROR;
 @Slf4j
 public class ConvertUtils {
 
+    private static final ObjectMapper objectMapper = JsonMapper.builder()
+            .findAndAddModules()
+            .build();
+    public static <T> T convertValue(Object o, Class<T> clazz) {
+        if (o == null) {
+            return null;
+        }
+        try {
+            return objectMapper.readValue(toObjectString(o), clazz);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+            throw new ApiException(JSON_PROCESSING_ERROR);
+        }
+    }
+
+    public static String toObjectString(Object o) {
+        try {
+            return objectMapper.writeValueAsString(o);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+            throw new ApiException(JSON_PROCESSING_ERROR);
+        }
+    }
+
     public static Object convertToFieldType(String value, Class<?> fieldType) {
         if (fieldType.equals(Boolean.class)) {
             return Boolean.parseBoolean(value);
