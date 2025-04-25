@@ -1,2 +1,2 @@
-INSERT into users(user_id, username, password, is_enabled) values(1, 'admin', '$2a$10$cKDaVFXl/l24TmiRHBhZGehreXZ6rCJRgpJ9btsRJQlxfSCH9Nnem', true);
-INSERT into users(user_id, username, password, is_enabled) values(2, 'user_teams', '$2a$10$cKDaVFXl/l24TmiRHBhZGehreXZ6rCJRgpJ9btsRJQlxfSCH9Nnem', true);
+INSERT into users(user_id, username, password, is_enabled) values(1, 'test', '$2a$10$rHFHXrl/nbppxfi4KrTfvO9FoUVWFcxTMDQABFHHhpmaN2L6f8zI2', true);
+INSERT into users(user_id, username, password, is_enabled) values(2, 'user_teams', '$2a$10$rHFHXrl/nbppxfi4KrTfvO9FoUVWFcxTMDQABFHHhpmaN2L6f8zI2', true);
