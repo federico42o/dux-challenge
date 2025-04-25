@@ -21,7 +21,7 @@ public class TeamResource extends AbstractResource {
 
     @PostMapping
     public ResponseEntity<TeamDTO> save(@Valid @RequestBody TeamDTO teamDto) {
-        return response(teamService.save(teamDto));
+        return responseCreated(teamService.save(teamDto));
     }
     @GetMapping
     public PaginatedResponse<TeamDTO> findAll(Pageable pageable) {

@@ -23,3 +23,4 @@ VALUES(1, 'Real Madrid', 'España', false, 'La Liga'),
       (22, 'Besiktas JK', 'Turquía', false, 'Süper Lig'),
       (23, 'SSC Napoli', 'Italia', false, 'Serie A'),
       (24, 'Atlético Madrid', 'España', false, 'La Liga');
+ALTER SEQUENCE team_seq RESTART WITH 25;
