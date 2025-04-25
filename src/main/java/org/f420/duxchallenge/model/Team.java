@@ -18,7 +18,7 @@ import lombok.*;
                 @Index(columnList = "pais")
         },
         uniqueConstraints = {
-                @UniqueConstraint(name = "UK_name_country", columnNames = {"nombre", "pais"}),
+                @UniqueConstraint(name = "UK_name_country_league", columnNames = {"nombre", "pais","liga"}),
         }
 )
 @SequenceGenerator(name = "team_seq", sequenceName = "team_seq", allocationSize = 1)

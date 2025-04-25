@@ -40,8 +40,13 @@ public class TeamResource extends AbstractResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody TeamDTO updateRequest) {
-        teamService.update(id, updateRequest);
+    public ResponseEntity<TeamDTO> update(@PathVariable Long id, @Valid @RequestBody TeamDTO updateRequest) {
+        return response(teamService.update(id, updateRequest));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        teamService.delete(id);
         return emptyResponse();
     }
 

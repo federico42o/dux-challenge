@@ -14,6 +14,8 @@ public enum ErrorMessage {
     USERNAME_NOT_FOUND("El usuario {0} no fue encontrado.", 404),
     MALFORMED_JWT("Token inválido", 401),
     ACCESS_DENIED("No tiene permisos para acceder a este recurso", 403),
+    ID_REQUIRED("El campo ID es requerido", 400),
+    ENTITY_ALREADY_EXISTS("Ya existe un registro con estas propiedades", 400),
     ;
 
     private final String message;

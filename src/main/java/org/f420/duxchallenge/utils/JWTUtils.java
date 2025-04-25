@@ -121,14 +121,4 @@ public class JWTUtils {
         return decodedJWT.getClaim(claimName);
     }
 
-    /**
-     * Ver todos los claims
-     *
-     * @param decodedJWT jwt decodificado
-     * @return Map con todos los claims
-     */
-    public Map<String, Claim> getAllClaims(DecodedJWT decodedJWT) {
-        return decodedJWT.getClaims();
-    }
-
 }

@@ -16,10 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -115,15 +112,51 @@ class TeamServiceTest {
 
         verify(teamDAO, times(1)).save(any(Team.class));
     }
+    @Test
+    void shouldReactivateIfTeamIsDeleted() {
+        Team deletedTeam = new Team(1L, "Real Madrid", "España", "La Liga", true);
+        Team team = new Team(1L, "Real Madrid", "España", "La Liga", false);
+        TeamDTO expected = new TeamDTO(1L, "Real Madrid", "España", "La Liga");
+
+        when(teamDAO.findByNombreAndLigaAndPais(any(), any(), any())).thenReturn(Optional.of(deletedTeam));
+        when(teamDAO.save(any())).thenReturn(team);
+
+        TeamDTO savedTeamDTO = teamService.save(expected);
+
+        assertNotNull(savedTeamDTO);
+        assertEquals(false, team.getDeleted());
+        assertEquals(expected.getId(), savedTeamDTO.getId());
+        assertEquals(expected.getNombre(), savedTeamDTO.getNombre());
+        assertEquals(expected.getPais(), savedTeamDTO.getPais());
+        assertEquals(expected.getLiga(), savedTeamDTO.getLiga());
+        assertEquals(false, team.getDeleted());
+
+        verify(teamDAO, times(1)).findByNombreAndLigaAndPais(any(), any(), any());
+        verify(teamDAO, times(1)).save(any(Team.class));
+    }
+
+    @Test
+    void shouldThrowApiExceptionIfTeamExists() {
+        Team team = new Team(1L, "Real Madrid", "España", "La Liga", false);
+        TeamDTO expected = new TeamDTO(1L, "Real Madrid", "España", "La Liga");
+
+        when(teamDAO.findByNombreAndLigaAndPais(any(), any(), any())).thenReturn(Optional.of(team));
+
+        assertThrows(ApiException.class, () -> teamService.save(expected));
+
+        verify(teamDAO, times(1)).findByNombreAndLigaAndPais(any(), any(), any());
+        verify(teamDAO, times(0)).save(any(Team.class));
+    }
 
     @ParameterizedTest(name = "[{index}]: Actualizando equipo")
     @DisplayName("teamService.update")
     @MethodSource("providerForUpdate")
     void shouldUpdate(Team originalEntity, TeamDTO updateRequest, Team expected) {
-        when(teamDAO.findById(any())).thenReturn(Optional.of(originalEntity));
-        teamService.update(originalEntity.getId(), updateRequest);
+        when(teamDAO.findByIdAndDeletedIsFalse(originalEntity.getId())).thenReturn(Optional.of(originalEntity));
+        when(teamDAO.save(originalEntity)).thenReturn(originalEntity);
 
-        assertEquals(updateRequest.getId(), expected.getId());
+        teamService.update(originalEntity.getId(), updateRequest);
+        assertEquals(originalEntity.getId(), expected.getId());
         if (updateRequest.getNombre() != null && !updateRequest.getNombre().isEmpty()) {
             assertEquals(updateRequest.getNombre(), expected.getNombre());
         } else {
@@ -140,6 +173,7 @@ class TeamServiceTest {
             assertEquals(originalEntity.getLiga(), expected.getLiga());
         }
 
+        verify(teamDAO, times(1)).findByIdAndDeletedIsFalse(any(Long.class));
         verify(teamDAO, times(1)).save(any(Team.class));
     }
 
@@ -148,6 +182,11 @@ class TeamServiceTest {
         Long invalidId = -999L;
         when(teamDAO.findById(invalidId)).thenReturn(Optional.empty());
         assertThrows(ApiException.class, () -> teamService.update(invalidId, any()));
+    }
+
+    @Test
+    void shouldNotUpdateAndThrowApiExceptionWhenIdIsNull() {
+        assertThrows(ApiException.class, () -> teamService.update(null, new TeamDTO()));
     }
     @Test
     @DisplayName("teamService.findAll")
@@ -172,7 +211,7 @@ class TeamServiceTest {
         Team team = new Team(1L, "Real Madrid", "España", "La Liga", false);
         TeamDTO teamDTO = new TeamDTO(1L, "Real Madrid", "España", "La Liga");
 
-        when(teamDAO.findById(1L)).thenReturn(Optional.of(team));
+        when(teamDAO.findByIdAndDeletedIsFalse(1L)).thenReturn(Optional.of(team));
 
         TeamDTO result = teamService.findById(1L);
 
@@ -181,34 +220,53 @@ class TeamServiceTest {
         assertEquals(teamDTO.getPais(), result.getPais());
         assertEquals(teamDTO.getLiga(), result.getLiga());
 
-        verify(teamDAO, times(1)).findById(1L);
+        verify(teamDAO, times(1)).findByIdAndDeletedIsFalse(1L);
     }
 
     @Test
     void shouldThrowApiExceptionWhenTeamIsDeleted() {
-        Team team = new Team(1L, "Real Madrid", "España", "La Liga", true);
-
-        when(teamDAO.findById(1L)).thenReturn(Optional.of(team));
+        when(teamDAO.findByIdAndDeletedIsFalse(1L)).thenReturn(Optional.empty());
 
         assertThrows(ApiException.class, () -> teamService.findById(1L));
 
-        verify(teamDAO, times(1)).findById(1L);
+        verify(teamDAO, times(1)).findByIdAndDeletedIsFalse(1L);
     }
 
     @Test
     void shouldThrowApiExceptionWhenIdIsNotFound() {
         Long invalidId = 999L;
 
-        when(teamDAO.findById(invalidId)).thenReturn(Optional.empty());
+        when(teamDAO.findByIdAndDeletedIsFalse(invalidId)).thenReturn(Optional.empty());
 
         assertThrows(ApiException.class, () -> teamService.findById(invalidId));
 
-        verify(teamDAO, times(1)).findById(invalidId);
+        verify(teamDAO, times(1)).findByIdAndDeletedIsFalse(invalidId);
+    }
+
+    @Test
+    void shouldDeleteTeam() {
+        Team team = new Team(1L, "Real Madrid", "España", "La Liga", false);
+        when(teamDAO.findByIdAndDeletedIsFalse(team.getId())).thenReturn(Optional.of(team));
+        teamService.delete(1L);
+        verify(teamDAO, times(1)).findByIdAndDeletedIsFalse(team.getId());
+
+        ArgumentCaptor<Team> teamCaptor = ArgumentCaptor.forClass(Team.class);
+        verify(teamDAO).save(teamCaptor.capture());
+
+        Team savedTeam = teamCaptor.getValue();
+        assertTrue(savedTeam.getDeleted());
+    }
+
+    @Test
+    void shouldThrowApiExceptionWhenEntityNotFound() {
+        when(teamDAO.findByIdAndDeletedIsFalse(any(Long.class))).thenReturn(Optional.empty());
+        assertThrows(ApiException.class, () -> teamService.delete(any(Long.class)));
+        verify(teamDAO, times(1)).findByIdAndDeletedIsFalse(any(Long.class));
     }
 
     public static List<Team> findAllTeamsFromJson() {
         //Se deberia mover a ConvertUtils
-        String teamsJsonUrl = "src/test/java/org/f420/duxchallenge/resources/teams.json";
+        String teamsJsonUrl = "src/test/resources/teams.json";
         String content;
         try {
             content = Files.readString(Paths.get(teamsJsonUrl));
