@@ -64,10 +64,20 @@ public class TeamService {
         if (id == null) {
             throw new ApiException(ID_REQUIRED);
         }
+
         Team team = teamDAO.findByIdAndDeletedIsFalse(id)
                 .orElseThrow(
                         () -> new ApiException(ENTITY_NOT_FOUND, id)
                 );
+
+        Optional<Team> existing = teamDAO.findByNombreAndLigaAndPais(
+                teamDTO.getNombre(),
+                teamDTO.getLiga(),
+                teamDTO.getPais());
+
+        if (existing.isPresent()) {
+            throw new ApiException(ENTITY_ALREADY_EXISTS);
+        }
 
         team.setNombre(Optional.ofNullable(teamDTO.getNombre()).orElse(team.getNombre()));
         team.setPais(Optional.ofNullable(teamDTO.getPais()).orElse(team.getPais()));
