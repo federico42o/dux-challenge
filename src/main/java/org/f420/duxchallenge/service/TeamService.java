@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static org.f420.duxchallenge.dao.custom.TeamSpecification.buildSpecificationFromFilter;
 import static org.f420.duxchallenge.enums.ErrorMessage.ENTITY_NOT_FOUND;
@@ -47,6 +48,7 @@ public class TeamService {
             return;
         }
         Team team = teamDAO.findById(id)
+                .filter(Predicate.not(Team::getDeleted))
                 .orElseThrow(
                         () -> new ApiException(ENTITY_NOT_FOUND, id)
                 );
@@ -54,7 +56,7 @@ public class TeamService {
         team.setNombre(Optional.ofNullable(teamDTO.getNombre()).orElse(team.getNombre()));
         team.setPais(Optional.ofNullable(teamDTO.getPais()).orElse(team.getPais()));
         team.setLiga(Optional.ofNullable(teamDTO.getLiga()).orElse(team.getLiga()));
-
+        teamDAO.save(team);
     }
 
     @Transactional(readOnly = true)
@@ -67,7 +69,7 @@ public class TeamService {
     @Transactional(readOnly = true)
     public TeamDTO findById(@NonNull Long id) {
         Optional<Team> team = teamDAO.findById(id);
-        return team.map(TeamMapper::toTeamDTO).orElseThrow(
+        return team.filter(Predicate.not(Team::getDeleted)).map(TeamMapper::toTeamDTO).orElseThrow(
                 () -> new ApiException(ENTITY_NOT_FOUND, id)
         );
     }

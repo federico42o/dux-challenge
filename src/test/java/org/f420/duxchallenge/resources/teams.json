@@ -1,0 +1,170 @@
+[
+  {
+    "id": 1,
+    "nombre": "Real Madrid",
+    "pais": "España",
+    "liga": "La Liga",
+    "deleted": false
+  },
+  {
+    "id": 2,
+    "nombre": "FC Barcelona",
+    "pais": "España",
+    "liga": "La Liga",
+    "deleted": false
+  },
+  {
+    "id": 3,
+    "nombre": "Manchester United",
+    "pais": "Inglaterra",
+    "liga": "Premier League",
+    "deleted": false
+  },
+  {
+    "id": 4,
+    "nombre": "Liverpool FC",
+    "pais": "Inglaterra",
+    "liga": "Premier League",
+    "deleted": false
+  },
+  {
+    "id": 5,
+    "nombre": "Juventus FC",
+    "pais": "Italia",
+    "liga": "Serie A",
+    "deleted": false
+  },
+  {
+    "id": 6,
+    "nombre": "AC Milan",
+    "pais": "Italia",
+    "liga": "Serie A",
+    "deleted": false
+  },
+  {
+    "id": 7,
+    "nombre": "Bayern Munich",
+    "pais": "Alemania",
+    "liga": "Bundesliga",
+    "deleted": false
+  },
+  {
+    "id": 8,
+    "nombre": "Borussia Dortmund",
+    "pais": "Alemania",
+    "liga": "Bundesliga",
+    "deleted": false
+  },
+  {
+    "id": 9,
+    "nombre": "Paris Saint-Germain",
+    "pais": "Francia",
+    "liga": "Ligue 1",
+    "deleted": false
+  },
+  {
+    "id": 10,
+    "nombre": "Olympique de Marseille",
+    "pais": "Francia",
+    "liga": "Ligue 1",
+    "deleted": false
+  },
+  {
+    "id": 11,
+    "nombre": "FC Porto",
+    "pais": "Portugal",
+    "liga": "Primeira Liga",
+    "deleted": false
+  },
+  {
+    "id": 12,
+    "nombre": "Sporting CP",
+    "pais": "Portugal",
+    "liga": "Primeira Liga",
+    "deleted": false
+  },
+  {
+    "id": 13,
+    "nombre": "Ajax Amsterdam",
+    "pais": "Países Bajos",
+    "liga": "Eredivisie",
+    "deleted": false
+  },
+  {
+    "id": 14,
+    "nombre": "Feyenoord",
+    "pais": "Países Bajos",
+    "liga": "Eredivisie",
+    "deleted": false
+  },
+  {
+    "id": 15,
+    "nombre": "Celtic FC",
+    "pais": "Escocia",
+    "liga": "Scottish Premiership",
+    "deleted": false
+  },
+  {
+    "id": 16,
+    "nombre": "Rangers FC",
+    "pais": "Escocia",
+    "liga": "Scottish Premiership",
+    "deleted": false
+  },
+  {
+    "id": 17,
+    "nombre": "Galatasaray SK",
+    "pais": "Turquía",
+    "liga": "Süper Lig",
+    "deleted": false
+  },
+  {
+    "id": 18,
+    "nombre": "Fenerbahçe SK",
+    "pais": "Turquía",
+    "liga": "Süper Lig",
+    "deleted": false
+  },
+  {
+    "id": 19,
+    "nombre": "FC Zenit Saint Petersburg",
+    "pais": "Rusia",
+    "liga": "Premier League Rusa",
+    "deleted": false
+  },
+  {
+    "id": 20,
+    "nombre": "Spartak Moscow",
+    "pais": "Rusia",
+    "liga": "Premier League Rusa",
+    "deleted": false
+  },
+  {
+    "id": 21,
+    "nombre": "SL Benfica",
+    "pais": "Portugal",
+    "liga": "Primeira Liga",
+    "deleted": false
+  },
+  {
+    "id": 22,
+    "nombre": "Besiktas JK",
+    "pais": "Turquía",
+    "liga": "Süper Lig",
+    "deleted": false
+  },
+  {
+    "id": 23,
+    "nombre": "SSC Napoli",
+    "pais": "Italia",
+    "liga": "Serie A",
+    "deleted": false
+  },
+  {
+    "id": 24,
+    "nombre": "Atlético Madrid",
+    "pais": "España",
+    "liga": "La Liga",
+    "deleted": false
+  }
+]
