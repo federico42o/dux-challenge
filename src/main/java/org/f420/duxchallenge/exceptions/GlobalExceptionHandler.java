@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ErrorResponse> handleApiException(ApiException ex) {
-        log.error("excepcion capturada: {}", ex.getMessage());
+        log.error("excepcion capturada: {}", ex.getErrorMessage(), ex);
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errorMessage(ex.getErrorMessage())
                 .statusCode(ex.getStatusCode())
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
                 .stream()
                 .map(error -> String.format("%s: %s", error.getField(), error.getDefaultMessage()))
                 .collect(Collectors.joining("\n"));
-        log.error("excepcion capturada: {}", ex.getMessage());
+        log.error("excepcion capturada: {}", ex.getMessage(), ex);
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errorMessage(message)
                 .statusCode(HttpStatus.BAD_REQUEST.value())
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(JWTVerificationException.class)
     public ResponseEntity<ErrorResponse> handleAuthExceptions(JWTVerificationException ex) {
-        log.error("excepcion capturada: {}", ex.getMessage());
+        log.error("excepcion capturada: {}", ex.getMessage(), ex);
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errorMessage(ex.getMessage())
                 .statusCode(HttpStatus.FORBIDDEN.value())
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PropertyReferenceException.class)
     public ResponseEntity<ErrorResponse> handlePropertyReferenceException(PropertyReferenceException ex) {
-        log.error("excepcion capturada: {}", ex.getMessage());
+        log.error("excepcion capturada: {}", ex.getMessage(), ex);
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errorMessage(ex.getMessage())
                 .statusCode(HttpStatus.BAD_REQUEST.value())
@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException(Exception ex) {
-        log.error("excepcion capturada: {}", ex.getMessage());
+        log.error("excepcion capturada: {}", ex.getMessage(), ex);
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errorMessage(ex.getMessage())
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
